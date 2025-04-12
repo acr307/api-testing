@@ -1,14 +1,20 @@
 # conftest.py
 import pytest
 import os
-from dotenv import load_dotenv
+import requests
 
-load_dotenv()
+# Only load .env when running locally
+if os.getenv("GITHUB_ACTIONS") != "true":
+    from dotenv import load_dotenv
+    load_dotenv()
 
 @pytest.fixture
 def stripe_headers():
+    api_key = os.getenv('STRIPE_API_KEY')
+    if not api_key:
+        raise RuntimeError("Missing STRIPE_API_KEY environment variable.")
     return {
-        "Authorization": f"Bearer {os.getenv('STRIPE_API_KEY')}",
+        "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/x-www-form-urlencoded"
     }
 
