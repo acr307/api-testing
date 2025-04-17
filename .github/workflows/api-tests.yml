@@ -27,5 +27,6 @@ jobs:
       - name: Run tests
         env:
           STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
+          BASE_URL: https://api.stripe.com/v1
         run: |
           pytest -v tests/functional
