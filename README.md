@@ -1,8 +1,81 @@
 # Stripe API Testing Suite 🧪
 
-This project contains a comprehensive API testing suite built on **Stripe's sandbox environment**, targeting the full user flow of `Customer`, `Card`, and `Charge` objects. It combines **live and mocked API techniques** to validate regression, integration, smoke, security, and performance behaviors.
+This project contains a suite of automated tests for interacting with the Stripe API, focusing on core objects like Customers, Charges, and Cards.
 
----
+## Project Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd api-testing
+    ```
+2.  **Create a Python virtual environment:**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate # On Windows use `venv\Scripts\activate`
+    ```
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+4.  **Set up environment variables:**
+    *   Create a `.env` file in the project root.
+    *   Add your Stripe secret key to the `.env` file:
+        ```dotenv
+        STRIPE_API_KEY=sk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        BASE_URL=https://api.stripe.com/v1
+        ```
+    *   Replace `sk_test_...` with your actual Stripe *test* secret key.
+
+## Running Tests
+
+Ensure your virtual environment is active and the `.env` file is configured.
+
+*   **Run all tests:**
+    ```bash
+    pytest -v
+    ```
+*   **Run tests in a specific file:**
+    ```bash
+    pytest -v tests/functional/test_cards.py
+    ```
+*   **Run a specific test function:**
+    ```bash
+    pytest -v tests/functional/test_cards.py::test_create_card_for_customer
+    ```
+*   **Run tests marked with a specific type (e.g., functional):**
+    *(Requires adding `@pytest.mark.<marker_name>` decorators to tests)*
+    ```bash
+    pytest -v -m functional
+    ```
+
+## Test Suite Overview
+
+The tests are organized into the following categories within the `tests/` directory:
+
+*   **Functional (`tests/functional/`):** Tests that interact directly with the live Stripe API (using test keys). They cover:
+    *   Customer management (Create)
+    *   Charge creation (including varied amounts, missing parameters, declined tokens)
+    *   Card management (Create, Retrieve, List, Update, Delete)
+    *   Negative scenarios (e.g., invalid data, non-existent resources).
+*   **Mock (`tests/mock/`):** Tests that use `requests-mock` to simulate Stripe API responses without making actual API calls. Useful for testing specific scenarios (like errors, timeouts) quickly and reliably. Covers:
+    *   Customer creation (Success, Invalid Email)
+    *   Charge creation (Error, Timeout)
+    *   Card operations (Create, Retrieve, List, Update, Delete, Not Found).
+*   **Performance (`tests/performance/`):** Tests that measure the response time of key API calls against defined thresholds. Covers:
+    *   Customer creation
+    *   Charge creation
+    *   Card creation
+    *   Listing cards.
+*   **Security (`tests/security/`):** Tests focused on authentication and authorization. Covers:
+    *   Accessing endpoints with valid, invalid, and missing API keys.
+    *   Specific security-related scenarios (e.g., invalid tokens for charges).
+*   **Integration (`tests/integration/`):** Tests that verify the interaction between multiple API resources in a typical user flow. Covers:
+    *   The full flow of creating a customer, adding a card to them, and then creating a charge using that customer and card.
+
+## CI/CD
+
+A GitHub Actions workflow (`.github/workflows/api-tests.yml`) is configured to run the full test suite automatically on pushes to the `main` branch.
 
 ## 🔍 Overview
 
@@ -13,8 +86,6 @@ This suite is designed to simulate real-world Stripe usage in a secure, scalable
 - ✅ Regression drift and schema stability
 - ✅ Security edge cases and auth validation
 - ✅ Token usage and performance under rate-limited conditions
-
----
 
 ## ⚙️ Tech Stack
 
@@ -27,8 +98,6 @@ This suite is designed to simulate real-world Stripe usage in a secure, scalable
 - **Mocking:** Postman Mock Server, WireMock (optional)  
 - **CI/CD:** GitHub Actions  
 - **Reports:** HTML (`pytest-html`), snapshot diffs, semantic logs
-
----
 
 ## 📁 Directory Structure
 
