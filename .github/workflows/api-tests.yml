@@ -24,9 +24,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Set environment variables
+      - name: Run tests
         env:
           STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
         run: |
-          echo "Running tests..."
-          pytest -v
+          pytest -v tests/functional

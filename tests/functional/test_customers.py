@@ -6,7 +6,8 @@ import pytest
     ("param2@example.com", "Param Two"),
     ("param3@example.com", "Param Three")
 ])
-def test_create_customer_param(base_url, stripe_headers, email, name):
+def test_create_customer_param(stripe_headers, email, name):
+    base_url = os.getenv("BASE_URL")
     data = {
         "email": email,
         "name": name
