@@ -1,5 +1,6 @@
 import requests
 import pytest
+import os
 
 @pytest.mark.parametrize("amount,expected_status", [
     (1000, 200),  # valid
@@ -25,4 +26,6 @@ def test_charge_with_varied_amounts(stripe_headers, amount, expected_status):
         assert body["status"] == "succeeded"
     else:
         print("Failed response: ", body)
-        assert False
+        # Check that the response body contains an error object
+        assert "error" in body
+        assert "message" in body["error"] # Further check for a message

@@ -1,4 +1,5 @@
 import pytest
+import os
 
 def test_mock_create_customer(requests_mock):
     base_url = os.getenv("BASE_URL")

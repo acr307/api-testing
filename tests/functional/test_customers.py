@@ -1,5 +1,6 @@
 import requests
 import pytest
+import os
 
 @pytest.mark.parametrize("email,name", [
     ("param1@example.com", "Param One"),

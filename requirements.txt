@@ -1,4 +1,6 @@
 pytest
 requests
-python-dotenv
 requests-mock
+python-dotenv # Added to load .env file
+pytest-benchmark # For performance tests
+stripe # Official Stripe Python library
